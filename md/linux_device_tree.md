@@ -1,13 +1,3 @@
----
-layout: post
-title: "Device Tree 详解"
-keywords: ["DTS","DTB","DTC","Node","Property","OpenFirmware"]
-description: ""
-categories: "linux"
-tags: ["DTS","DTB","DTC","Node","Property","OpenFirmware"]
-author: Peng Weilin
-permalink: /device-tree.html
----
 
 # 1、DTS语法
 
