@@ -248,12 +248,12 @@ enum ring_buffer_type {
 <caption> type_len解析 </caption>
 
 <tr>
-<th style="width: 100px;">type_len(5bit)</th>
-<th style="width: 100px;">time_delta(27bit)</th>
-<th style="width: 100px;">array[0](32bit)</th>
-<th style="width: 100px;">type</th>
-<th style="width: 100px;">len</th>
-<th style="width: 100px;">time_delta</th>
+<th style="width: 50px;">type_len(5bit)</th>
+<th style="width: 50px;">time_delta(27bit)</th>
+<th style="width: 50px;">array[0](32bit)</th>
+<th style="width: 50px;">type</th>
+<th style="width: 50px;">len</th>
+<th style="width: 50px;">time_delta</th>
 <th style="width: 400px;">说明</th>
 </tr>
 
