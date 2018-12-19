@@ -370,7 +370,7 @@ int trace_event_reg(struct trace_event_call *call,
 
 # 3、event add/del
 
-![perf_k_pmu_tp_provide_data](./image/perf_k/perf_k_pmu_tp_provide_data.png)
+![perf_k_pmu_tp_provide_data](../image/perf_k/perf_k_pmu_tp_provide_data.png)
 
 承接上一步perf_event注册以后，perf_event的回调函数已经可以被tracepoint调用，但是perf_event仍然收不到数据。因为这个时候perf_event还处于enable/inactive状态，需要处于active状态才能收到数据。
 
@@ -1102,7 +1102,7 @@ out:
 
 ```
 
-![perf_k_pmu_tp_sample_format](./image/perf_k/perf_k_pmu_tp_sample_format.png)
+![perf_k_pmu_tp_sample_format](../image/perf_k/perf_k_pmu_tp_sample_format.png)
 
 perf_event_type中详细描述了各种type类型的sample数据排列模式：
 

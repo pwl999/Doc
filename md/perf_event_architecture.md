@@ -20,13 +20,13 @@ perf的基本包装模型是这样的，对每一个event分配一个对应的pe
 
     使用perf_event_context类型的链表来连接本cpu的相关perf_event。这样的链表共有两条(perf_hw_context = 0, perf_sw_context = 1)，链表指针存放在per_cpu变量pmu->pmu_cpu_context.ctx中由所有同类型的pmu共享。
 
-    ![perf_k_event_cpu_view](./image/perf_k/perf_k_event_cpu_view.png)
+    ![perf_k_event_cpu_view](../image/perf_k/perf_k_event_cpu_view.png)
 
 - 2、**task维度**：
 
     使用perf_event_context类型的链表来连接本task的相关perf_event。这样的链表共有两条(perf_hw_context = 0, perf_sw_context = 1)，链表指针存放在task->perf_event_ctxp[ctxn]变量中。
 
-    ![perf_k_event_task_view](./image/perf_k/perf_k_event_task_view.png)
+    ![perf_k_event_task_view](../image/perf_k/perf_k_event_task_view.png)
 
 - 3、perf_event_open()系统调用使用cpu、pid两个参数来指定perf_event的cpu、task维度。  
     
@@ -58,17 +58,17 @@ perf的基本包装模型是这样的，对每一个event分配一个对应的pe
 
     对于cpu维度的perf_event来说只要cpu online会一直运行，而对于task维度的perf_event来说只有在task得到调度运行的时候event才能运行。所以在每个cpu上同时只能有一个task维度的perf_evnt得到执行，cpu维度的context使用了pmu->pmu_cpu_context->task_ctx指针来保存当前运行的task context。
     
-    ![perf_k_perf_task_sched](./image/perf_k/perf_k_perf_task_sched.png)  
+    ![perf_k_perf_task_sched](../image/perf_k/perf_k_perf_task_sched.png)  
     
     perf驱动层的**精髓**就在于此：在合适的时间合适的开关对应的perf_event。(具体参见后面perf_event_task_sched_in()、perf_event_task_sched_out()的代码解析)  
 
     在单个cpu上，多个任务调度时context/perf_event的开关情况：
     
-    ![perf_k_perf_task_sched_time_on_onecpu](./image/perf_k/perf_k_perf_task_sched_time_on_onecpu.png)
+    ![perf_k_perf_task_sched_time_on_onecpu](../image/perf_k/perf_k_perf_task_sched_time_on_onecpu.png)
     
     单个任务，在多个cpu上调度时context/perf_event的开关情况：
     
-    ![perf_k_perf_task_sched_time_on_multicpu]((./image/perf_k/perf_k_perf_task_sched_time_on_multicpu.png)
+    ![perf_k_perf_task_sched_time_on_multicpu]((../image/perf_k/perf_k_perf_task_sched_time_on_multicpu.png)
 
 
 - 6、**inherit**：
@@ -77,7 +77,7 @@ perf的基本包装模型是这样的，对每一个event分配一个对应的pe
     
     父进程中所有attr.inherit=1的event被子进程所继承和复制，在使用PERF_FORMAT_GROUP读event的count值时，会把inherit所有子进程的值累加进来。(具体参见后面perf_event_init_task()、perf_read_group()的代码解析)
 
-    ![perf_k_event_task_inherit](./image/perf_k/perf_k_event_task_inherit.png)
+    ![perf_k_event_task_inherit](../image/perf_k/perf_k_event_task_inherit.png)
 
 - 7、**exclusive**：
 
@@ -90,7 +90,7 @@ perf的基本包装模型是这样的，对每一个event分配一个对应的pe
     cpu维度的context：this_cpu_ptr(pmu->pmu_cpu_context->ctx)上链接的所有perf_event会根据绑定的pmu，链接到pmu对应的per_cpu的->perf_events链表上。
     task维度的context：this_cpu_ptr(pmu->pmu_cpu_context->task_ctx)上链接的所有perf_event会根据绑定的pmu，链接到pmu对应的per_cpu的->perf_events链表上。perf_event还需要做cpu匹配，符合(event->cpu == -1 || event->cpu == smp_processor_id())条件的event才能链接到pmu上。
     
-    ![perf_k_event_pmu_provide_data](./image/perf_k/perf_k_event_pmu_provide_data.png)
+    ![perf_k_event_pmu_provide_data](../image/perf_k/perf_k_event_pmu_provide_data.png)
 
 - 9、**enable_on_exec**：
 
@@ -117,7 +117,7 @@ perf的基本包装模型是这样的，对每一个event分配一个对应的pe
     
     如果perf_event支持inherit属性，那么它所有的子进程上继承的perf_event的sample数据，都会保存到父perf_event的ringbuffer中。perf_event可以inherit，但是ringbuffer不会重新分配，会共用父event的ringbuffer。
     
-    ![perf_k_event_ringbuffer](./image/perf_k/perf_k_event_ringbuffer.png)
+    ![perf_k_event_ringbuffer](../image/perf_k/perf_k_event_ringbuffer.png)
 
 - 11、**sample_period/sample_freq**:
 

@@ -35,7 +35,7 @@ PMU(Performance Monitor Unit)本来指的就是硬件上的性能监控计数器
 
 可以看到arm64的hardware pmu可以监控：cpu-cycles、instructions、cache-references、cache-misses、branch-misses、cache相关事件等等。它的监控原理比较简单：每个cpu有几个counter，counter 0固定只能配置成cpu-cycles，其他counter可以配置成支持的任意类型。当counter的计数达到我们配置的值后，产生中断，在中断中记录当前的pc等现场信息(sample数据)和累加counter计数(count数据)。
 
-![perf_k_pmu_hw_provide_data](./image/perf_k/perf_k_pmu_hw_provide_data.png)
+![perf_k_pmu_hw_provide_data](../image/perf_k/perf_k_pmu_hw_provide_data.png)
 
 我们可以利用pmu来做以下分析，例如：
 
@@ -1068,7 +1068,7 @@ armpmu_del(struct perf_event *event, int flags)
 
 # 4、event 数据采集
 
-![perf_k_pmu_hw_irq](./image/perf_k/perf_k_pmu_hw_irq.png)
+![perf_k_pmu_hw_irq](../image/perf_k/perf_k_pmu_hw_irq.png)
 
 hardware event是采样法，采样法都是依赖于中断实现的：
 

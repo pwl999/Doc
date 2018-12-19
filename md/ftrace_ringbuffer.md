@@ -9,7 +9,7 @@ ringbuffer是trace框架的一个基础，所有的trace原始数据都是通过
 
 # 2、ringbuffer初始化
 
-![image](./image/ftrace_ringbuffer/ringbuffer_frame.png)
+![image](../image/ftrace_ringbuffer/ringbuffer_frame.png)
 
 上图是ringbuffer的组织结构顶级视图，可以看到以下信息：
 
@@ -354,11 +354,11 @@ ring buffer不但记录了event数据，默认他还给每个event记录加上�
 
 那么计算page中event(n)的绝对时间戳 = page->time_stamp + event0->time_delta +  event1->time_delta + ... +  event(n-1)->time_delta:
 
-![image](./image/ftrace_ringbuffer/ringbuffer_calc_event_timestamp.png)
+![image](../image/ftrace_ringbuffer/ringbuffer_calc_event_timestamp.png)
 
 在计算event时间差时，是以一次full commit为单位的。如果发生了“nested-write”，那么这次full commit中多次write分配的event的时间差，最后都为0：
 
-![image](./image/ftrace_ringbuffer/ringbuffer_event_timestamp_nestwrite.png)
+![image](../image/ftrace_ringbuffer/ringbuffer_event_timestamp_nestwrite.png)
 
 
 

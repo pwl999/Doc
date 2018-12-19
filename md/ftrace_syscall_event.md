@@ -1,6 +1,6 @@
 # 1、函数插桩
 
-![image](./image/ftrace_syscall_event/syscall_event_flow.png)
+![image](../image/ftrace_syscall_event/syscall_event_flow.png)
 
 ## 1.1、"events/raw_syscalls/sys_enter"、"events/raw_syscalls/sys_exit" trace event的插桩
 
@@ -644,12 +644,12 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
 
 syscall enter event的数据格式：
 
-![image](./image/ftrace_syscall_event/entry_syscall_enter_event.png)
+![image](../image/ftrace_syscall_event/entry_syscall_enter_event.png)
 
 
 syscall exit event的数据格式：
 
-![image](./image/ftrace_syscall_event/entry_syscall_exit_event.png)
+![image](../image/ftrace_syscall_event/entry_syscall_exit_event.png)
 
 
 ## 2.2、filter

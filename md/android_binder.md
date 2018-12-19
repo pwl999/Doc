@@ -201,7 +201,7 @@ binder使用parcel方式来打包函数参数和返回值。parcel可以用来�
 
 这一类型数据的parcel包格式如下： 
 
-![binder_parcel_binder_object_format](./image/android_binder/binder_parcel_binder_object_format.png)
+![binder_parcel_binder_object_format](../image/android_binder/binder_parcel_binder_object_format.png)
 
 可以看到这种类型的parcel包中包含了两种数据：data0/data1/...是普通类型数据；binder_obj0/binder_obj1/...是binder对象，binder_obj0 offset/binder_obj1 offset/...指出了了binder对象在parcel包中的偏移；
 
@@ -211,7 +211,7 @@ binder对象和handle共用结构体struct flat_binder_object。
 
 一组service函数，对本地进程来说就是binder，对其他需要使用的进程来说需要远程引用，就是handle，是一对多的关系。关系图如下：
 
-![binder_binderobj_and_handle](./image/android_binder/binder_binderobj_and_handle.png)
+![binder_binderobj_and_handle](../image/android_binder/binder_binderobj_and_handle.png)
 
 binder object是service_server的一个“local binder object”，service_manager和service_client创建了多个远程引用“remote handle”。
 
@@ -230,13 +230,13 @@ binder驱动负责建立起**binder对象**和**handle**之间的映射关系，
 
 parcel还能传输文件句柄fd，此时的包格式如下：
 
-![binder_parcel_fd_object_format](./image/android_binder/binder_parcel_fd_object_format.png)
+![binder_parcel_fd_object_format](../image/android_binder/binder_parcel_fd_object_format.png)
 
 传输fd的意义何在呢？当binder的两个进程间需要传输大量的数据。例如：图像声音数据、或者是一个对象。可以在匿名共享内存(Ashmem)中创建一块区域，源进程会得到一个相应的fd，再把这个fd使用binder传递给目的进程，就可以共享数据了。
 
 需要特别说明的是对象的传递，在同一个进程内进行函数调用的话，参数对象通常是使用引用的方式传递的。但是如果是跨进程的调用，是没有办法引用的，只有把整个对象复制过去。这种操作叫做对象的序列化，java称为Serializable，android有优化的实现Parcelable。注意对象序列化的Parcelable和binder的parcel数据封装不是一回事，尽管他们原理上很相似。binder并没有提供对象Parcelable的接口，如果我们要跨进程传输对象，只能把对象序列化(Parcelable)到匿名共享内存中，再把对应fd通过binder传输给目的进程。
 
-![binder_fdobject_translate](./image/android_binder/binder_fdobject_translate.png)
+![binder_fdobject_translate](../image/android_binder/binder_fdobject_translate.png)
 
 binder驱动在检测到传输的是fd，会在新的进程中分配一个新的fd，并指向原来的file结构，这样fd就被跨进程duplicate了。两个进程使用各自的fd对匿名共享内存区域进行mmap映射，就能访问相同的内存区域了。
 
@@ -250,7 +250,7 @@ binder驱动在检测到传输的是fd，会在新的进程中分配一个新的
 
 前面说过binder通讯的本质就是在共享内存上加上一层api，我们来看看他是怎么管理共享内存的。
 
-![binder_alloc_buffer](./image/android_binder/binder_alloc_buffer.png)
+![binder_alloc_buffer](../image/android_binder/binder_alloc_buffer.png)
 
 我们可以看到：
 - binder驱动给每个进程分配最多4M的buffer空间，这段空间在内核通过binder_proc->alloc红黑树来管理，同时通过mmap映射到进程用户空间；
@@ -259,7 +259,7 @@ binder驱动在检测到传输的是fd，会在新的进程中分配一个新的
 - 另外因为进程支持多个线程，所以多个线程会共享本进程的binder buffer；
 
 
-![binder_alloc_buffer_transaction](./image/android_binder/binder_alloc_buffer_transaction.png)
+![binder_alloc_buffer_transaction](../image/android_binder/binder_alloc_buffer_transaction.png)
 
 我们看一下process 0、process n进程和process 1进程进行binder通讯时的buffer使用情况：
 
@@ -275,7 +275,7 @@ binder驱动在检测到传输的是fd，会在新的进程中分配一个新的
 
 ## 2.1、service_manager的初始化
 
-![binder_action_servicemanager_init](./image/android_binder/binder_action_servicemanager_init.png)
+![binder_action_servicemanager_init](../image/android_binder/binder_action_servicemanager_init.png)
 
 通过上图我们可以看到具体过程：
 
@@ -291,7 +291,7 @@ main() -> binder_open()、binder_become_context_manager()
 
 ## 2.2、service_server的addService
 
-![binder_action_serviceserver_addservice](./image/android_binder/binder_action_serviceserver_addservice.png)
+![binder_action_serviceserver_addservice](../image/android_binder/binder_action_serviceserver_addservice.png)
 
 通过上图我们可以看到，在service_server向service_manager注册service的时候，在驱动中的具体流程如下：
 
@@ -309,7 +309,7 @@ main() -> binder_loop() -> binder_parse() -> svcmgr_handler() -> do_add_service(
 
 ## 2.3、service_client的get service
 
-![binder_action_serviceclient_getservice_send](./image/android_binder/binder_action_serviceclient_getservice_send.png)
+![binder_action_serviceclient_getservice_send](../image/android_binder/binder_action_serviceclient_getservice_send.png)
 
 如上图service_client向service_manager发送get service请求的数据比较简单：
 
@@ -318,7 +318,7 @@ main() -> binder_loop() -> binder_parse() -> svcmgr_handler() -> do_add_service(
 - 3、parcel的内容中没有binder或者handle，不需要翻译；
 - 4、把parcel数据和其他信息打包成binder_transaction结构，并挂载到proc->todo/thread->todo链表中，等待service_manager进程的读取；
 
-![binder_action_serviceclient_getservice_reply](./image/android_binder/binder_action_serviceclient_getservice_reply.png)
+![binder_action_serviceclient_getservice_reply](../image/android_binder/binder_action_serviceclient_getservice_reply.png)
 
 上图是service_manager给service_client回复信息的过程：
 
@@ -332,7 +332,7 @@ main() -> binder_loop() -> binder_parse() -> svcmgr_handler() -> do_add_service(
 
 ## 2.4、service_client调用service
 
-![binder_action_serviceclient_callservice](./image/android_binder/binder_action_serviceclient_callservice.png)
+![binder_action_serviceclient_callservice](../image/android_binder/binder_action_serviceclient_callservice.png)
 
 上图是service_client调用service_server的service的过程：
 
@@ -348,11 +348,11 @@ main() -> binder_loop() -> binder_parse() -> svcmgr_handler() -> do_add_service(
 
 在Android O中binder增加了一种性能改进模式Scatter-gather，这是因为binder在传输IPC参数数据时，因为传输的量不大，binder实际上做了3次拷贝：
 
-![binder_transcation_3_copy](./image/android_binder/binder_transcation_3_copy.png)
+![binder_transcation_3_copy](../image/android_binder/binder_transcation_3_copy.png)
 
 Scatter-gather把3次copy优化成1次：
 
-![binder_transcation_Scatter-gather_1_copy](./image/android_binder/binder_transcation_Scatter-gather_1_copy.png)
+![binder_transcation_Scatter-gather_1_copy](../image/android_binder/binder_transcation_Scatter-gather_1_copy.png)
 
 具体的代码可以看驱动对BINDER_TYPE_PTR类型数据的处理：
 
@@ -526,7 +526,7 @@ service_manager逻辑很清晰，代码也不多，主要流程在上节中已�
 
 ## 4.1、process/thread
 
-![binder_native_process_thread](./image/android_binder/binder_native_process_thread.png)
+![binder_native_process_thread](../image/android_binder/binder_native_process_thread.png)
 
 上图已经把native层binder通讯最重要的部分都画出来了，理解了这张图native的实现基本理解了大半：
 
@@ -1348,7 +1348,7 @@ status_t BpBinder::transact(
 
 借用老罗的一张图总结，service_manager类之间复杂的关系：
 
-![binder_class_manager](./image/android_binder/binder_class_manager.jpg)
+![binder_class_manager](../image/android_binder/binder_class_manager.jpg)
 
 
 ## 4.3、server
@@ -1386,7 +1386,7 @@ void MediaPlayerService::instantiate() {
 
 所有的细节在上面几节都已经描述过了，还是借用老罗的一张图总结service_server类之间复杂的关系：
 
-![binder_class_server](./image/android_binder/binder_class_server.jpg)
+![binder_class_server](../image/android_binder/binder_class_server.jpg)
 
 ## 4.4、client proxy
 
@@ -1638,7 +1638,7 @@ public:
 
 还是借用老罗的一张图总结service_client类之间复杂的关系：
 
-![binder_class_client](./image/android_binder/binder_class_client.jpg)
+![binder_class_client](../image/android_binder/binder_class_client.jpg)
 
 ## 4.5、service thread管理
 

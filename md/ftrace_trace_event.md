@@ -4,7 +4,7 @@ Linux trace中，最基础的就是：function tracer和trace event。鉴于他�
 - tracer发展出了function、function_graph、irqsoff、preemptoff、wakeup等一系列tracer。
 - 而event也发展出tracepoint、kprobe、uprobe等一系列的event。
 
-![image](./image/ftrace_trace_event/trace_frame.png)
+![image](../image/ftrace_trace_event/trace_frame.png)
 
 不论是哪种trace，主要的工作都离不开上图的主要流程：
 
@@ -22,7 +22,7 @@ kernel在重要节点的固定位置，插入了几百个trace event用于跟踪
 
 ## 1.1、trace point
 
-![image](./image/ftrace_trace_event/tracepoint_flow.png)
+![image](../image/ftrace_trace_event/tracepoint_flow.png)
 
 关于tracepoint的工作的原理，我们举例说明：
 
@@ -2067,7 +2067,7 @@ trace_event_raw_event_##call(void *__data, proto)			\
 
 ## 2.1、数据格式
 
-![image](./image/ftrace_trace_event/entry_format.png)
+![image](../image/ftrace_trace_event/entry_format.png)
 
 我们可以看到，我们从ringbuffer从分配一段空间给event使用以后，除了保留给用户保存自己trace信息的空间，已经包含如下公共信息：
 
@@ -3089,7 +3089,7 @@ trace数据被存入ringbuffer以后，可以通过不同的形式来查看：
 
 ## 3.1、“trace”文件的读取
 
-![image](./image/ftrace_trace_event/entry_output.png)
+![image](../image/ftrace_trace_event/entry_output.png)
 
 上图展示了从trace文件中读取trace数据时的情况，把raw trace数据格式化成用户可读的形式。trace数据分成两部分：一部分是comm信息，一部分是用户自定义的trace信息。这两部分分开格式化
 
@@ -4100,7 +4100,7 @@ bool ftrace_event_is_function(struct trace_event_call *call)
 
 在trace_printk()定义一节中已经详细描述了3种(TRACE_BPRINT、TRACE_PRINT、TRACE_BPUTS)trace_event_call的数据存入过程。这里简单图示一下它们的数据存储结构：
 
-![image](./image/ftrace_trace_event/entry_tracepintk_format.png)
+![image](../image/ftrace_trace_event/entry_tracepintk_format.png)
 
 ## 4.4、数据读出
 

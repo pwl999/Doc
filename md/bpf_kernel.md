@@ -55,7 +55,7 @@ Systamp就是解决了这个问题得以发展的，它使用了ko的方式来�
 
 整个BPF的开发过程大概如下图所示：
 
-![bpf_frame](./image/bpf/bpf_frame.png)
+![bpf_frame](../image/bpf/bpf_frame.png)
 
 # 1、bpf()系统调用
 
@@ -782,7 +782,7 @@ next_insn:
 
 DAG的DFS算法可以参考“[Graph](http://www.csie.ntnu.edu.tw/~u91029/Graph.html#5)”一文。其中最重要的概念如下图：
 
-![DFS5](./image/bpf/DFS5.png)
+![DFS5](../image/bpf/DFS5.png)
 
 一个图形"Graph"经过DAG的DFS算法遍历后，对每一个根节点都会形成一颗树“DFS Tree”，多个根节点得到的多棵树形成一个森林"DFS Forest"。根据搜索的结构整个“Graph”的边“Edge”可以分成四类：
 
