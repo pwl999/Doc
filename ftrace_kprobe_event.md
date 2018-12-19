@@ -101,7 +101,7 @@ echo 'r:myretprobe do_sys_open $retval' >> /sys/kernel/debug/tracing/kprobe_even
 
 ## 1.3、kprobe event的创建
 
-![image](./image/ftrcae_kprobe_event/kprobe_event_stub.png)
+![image](./image/ftrace_kprobe_event/kprobe_event_stub.png)
 
 krpobe event和trace event的功能一样，那么大部分的实现是一样的，最关键的不同就是怎么使用新的插桩方法来创建event。使用向“/sys/kernel/debug/tracing/kprobe_events”文件中echo命令的形式来创建krpobe event。
 
@@ -787,11 +787,11 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
 
 kprobe event的数据格式为：
 
-![image](./image/ftrcae_kprobe_event/entry_kprobe_event.png)
+![image](./image/ftrace_kprobe_event/entry_kprobe_event.png)
 
 kretprobe event的数据格式为：
 
-![image](./image/ftrcae_kprobe_event/entry_kretprobe_event.png)
+![image](./image/ftrace_kprobe_event/entry_kretprobe_event.png)
 
 
 ## 2.2、filter
