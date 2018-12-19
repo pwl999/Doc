@@ -1348,7 +1348,7 @@ status_t BpBinder::transact(
 
 借用老罗的一张图总结，service_manager类之间复杂的关系：
 
-![binder_class_manager](./image/android_binder/binder_class_manager.png)
+![binder_class_manager](./image/android_binder/binder_class_manager.jpg)
 
 
 ## 4.3、server
@@ -1386,7 +1386,7 @@ void MediaPlayerService::instantiate() {
 
 所有的细节在上面几节都已经描述过了，还是借用老罗的一张图总结service_server类之间复杂的关系：
 
-![binder_class_server](./image/android_binder/binder_class_server.png)
+![binder_class_server](./image/android_binder/binder_class_server.jpg)
 
 ## 4.4、client proxy
 
@@ -1638,7 +1638,7 @@ public:
 
 还是借用老罗的一张图总结service_client类之间复杂的关系：
 
-![binder_class_client](./image/android_binder/binder_class_client.png)
+![binder_class_client](./image/android_binder/binder_class_client.jpg)
 
 ## 4.5、service thread管理
 
