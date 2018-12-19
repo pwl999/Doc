@@ -36,3 +36,12 @@
 ## [2.4、systrace](./md/systrace.md)
 
 # 3、Linux
+
+## [3.1、device tree](./md/linux_device_tree.md)
+## [3.2、scheduler](./md/linux_scheduler.md)
+## [3.3、time](./md/linux_time.md)
+## [3.4、workqueue](./md/linux_workqueue.md)
+## [3.5、interrupt](./md/linux_interrupt.md)
+## [3.6、signal](./md/linux_signal.md)
+## [3.7、process stop](./md/linux_process_stop.md)
+
