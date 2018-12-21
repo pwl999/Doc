@@ -8,17 +8,17 @@
 
 arm64和其他所有cpu架构的中断处理流程都是一样：正常执行流程被打断进入中断服务程序，保护现场、处理中断、恢复现场：
 
-![int_handler](../image/interrupt/int_handler.png)[^ARMPG]
+![int_handler](../images/interrupt/int_handler.png)[^ARMPG]
 
 在整个中断处理过程中，arm64的cpu全局中断是自动disable的(PSTATE寄存器中的interrupt bit被masks)。如果用户想支持interrupt nested，需要自己在中断服务程序中使能中断。linux现在是不使用中断嵌套的。
 
-![int_nested_handler](../image/interrupt/int_nested_handler.png)[^ARMPG]
+![int_nested_handler](../images/interrupt/int_nested_handler.png)[^ARMPG]
 
 ## 1.1 cpu中断打开/关闭
 
 arm64关闭和打开本地cpu的全局中断的方法，是操作SPSR(Saved Process Status Register)寄存器IRQ mask bit。
 
-![int_arm64_spsr](../image/interrupt/int_arm64_spsr.png)[^ARMPG]
+![int_arm64_spsr](../images/interrupt/int_arm64_spsr.png)[^ARMPG]
 
 linux中arm64关闭和打开本地cpu中断的函数实现。
 
@@ -78,7 +78,7 @@ static inline unsigned long arch_local_save_flags(void)
 
 上面描述了cpu对全局中断的处理，但是还有一个工作需要有人去做：就是把外部中断、内部中断、cpu间中断等各种中断按照优先级、亲和力、私有性等发送给多个cpu。负责这个工作的就是中断控制器GIC(Generic Interrupt Controller)。
 
-![int_gic400](../image/interrupt/int_gic400.gif)[^GICANALY]
+![int_gic400](../images/interrupt/int_gic400.gif)[^GICANALY]
 
 从软件角度上看，GIC可以分成两个功能模块：[^ARMPG]
 
@@ -118,7 +118,7 @@ static struct irq_chip gic_chip = {
 
 从代码上看linux中断的处理流程大概是这样的：
 
-![int_handle_flow](../image/interrupt/int_handle_flow.png)
+![int_handle_flow](../images/interrupt/int_handle_flow.png)
 
 从处理流程上看，对于gic的每个中断源，linux系统分配一个irq_desc数据结构与之对应。irq_desc结构中有两个中断处理函数desc->handle_irq()和desc->action->handler()，这两个函数代表中断处理的两个层级：
 
@@ -132,7 +132,7 @@ handle_percpu_devid_irq();
 
 - desc->action->handler()。第二层次的中断处理函数，由用户注册实现具体设备的驱动服务程序，都是和GIC操作无关的代码。同时一个中断源可以多个设备共享，所以一个desc可以挂载多个action，由链表结构组织起来。
 
-![int_handler_action](../image/interrupt/int_handler_action.png)
+![int_handler_action](../images/interrupt/int_handler_action.png)
 
 ## 1.4 中断服务注册
 
@@ -573,7 +573,7 @@ root@a0255:/ #
 
 线程化中断的创建和处理任务流程如下：
 
-![int_thread_irq](../image/interrupt/int_thread_irq.png)
+![int_thread_irq](../images/interrupt/int_thread_irq.png)
 
 线程和action是一一对应的，即用户注册一个中断处理程序对应一个中断线程。
 
@@ -997,7 +997,7 @@ extern irq_cpustat_t irq_stat[];		/* defined in asm/hardirq.h */
 
 - softirq的执行有两个时刻：在退出中断irq_exit()时或者在softirqd线程当中：
 
-![int_softirq_flow](../image/interrupt/int_softirq_flow.png)
+![int_softirq_flow](../images/interrupt/int_softirq_flow.png)
 
 软中断使用smpboot_register_percpu_thread()函数，给每个cpu上创建了对应的softirqd线程：
 

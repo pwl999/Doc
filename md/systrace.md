@@ -1,5 +1,5 @@
 
-![systrace](../image/systrace/systrace.png)
+![systrace](../images/systrace/systrace.png)
 
 上图基本就能说清systrace的整个框架：
 
@@ -34,7 +34,7 @@ systrace命令在ASOP源码包的ASOP_ROOT/external/chromium-trace/catapult/syst
 
 在命令启动以后，我们就可以在目标机上进行滑动、启动app等一系列操作，10s内的这些操作都会被记录下来最后dump进trace.html文件。我们可以通过google的chrome浏览器来查看、分析trace.html：'google-chrome trace.html'。
 
-![trace_html](../image/systrace/trace_html.png)
+![trace_html](../images/systrace/trace_html.png)
 
 可以通过'-l'选项来查看目标机支持的systrace事件全集：
 

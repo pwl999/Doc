@@ -22,7 +22,7 @@ kthreadd() -> create_kthread() -> kernel_thread()创建的新进程也不是直�
 
 - kernel/kthread.c:  
 
-![stop_kthread_create](../image/stop/stop_kthread_create.png)
+![stop_kthread_create](../images/stop/stop_kthread_create.png)
 
 ## 1.2内核进程的stop
 
@@ -30,7 +30,7 @@ kthreadd() -> create_kthread() -> kernel_thread()创建的新进程也不是直�
 
 这种代码为什么不做到通用代码kthread()中？这应该是和linux的设计思想相关的。linux运行内核态的策略比较灵活，而对用户态的策略更加严格统一。
 
-![stop_kthread_should_stop](../image/stop/stop_kthread_should_stop.png)
+![stop_kthread_should_stop](../images/stop/stop_kthread_should_stop.png)
 
 kthread_should_stop()和kthread_stop()的代码实现：
 
@@ -102,7 +102,7 @@ per_cpu进程从代码上看，实际也是调用kthread_create()来创建的。
 - kernel/smpboot.c:  
 - kernel/kthread.c:  
 
-![stop_smpboot_register](../image/stop/stop_smpboot_register.png)
+![stop_smpboot_register](../images/stop/stop_smpboot_register.png)
 
 
 我们可以看到smpboot_register又增加了一层封装：kthread() -> smpboot_thread_fn() -> ht->thread_fn()，这种封装的使用可以参考cpu_stop_threads。
@@ -228,7 +228,7 @@ static void __kthread_unpark(struct task_struct *k, struct kthread *kthread)
 
 - kernel/smpboot.c:  
 
-![stop_park_hotplug](../image/stop/stop_park_hotplug.png)
+![stop_park_hotplug](../images/stop/stop_park_hotplug.png)
 
 
 # 3.进程freeze
@@ -237,7 +237,7 @@ static void __kthread_unpark(struct task_struct *k, struct kthread *kthread)
 
 - kernel/power/suspend.c:  
 
-![stop_pm_suspend](../image/stop/stop_pm_suspend.png)
+![stop_pm_suspend](../images/stop/stop_pm_suspend.png)
 
 这suspend_freeze里面判断当前在那个阶段，有3个重要的变量：
 

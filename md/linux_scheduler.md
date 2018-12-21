@@ -3,7 +3,7 @@
 
 
 
-![schedule_frame](../image/scheduler/schedule_frame.png)
+![schedule_frame](../images/scheduler/schedule_frame.png)
 
 
 Linux进程调度(schedule)的框架如上图所示。
@@ -628,7 +628,7 @@ linux进程一般分成了实时进程(RT)和普通进程，linux使用sched_cla
 
 ## 2.1、linux2.6的O(1)调度算法
 
-![schedule_26O1_scheduler](../image/scheduler/schedule_26O1_scheduler.gif)
+![schedule_26O1_scheduler](../images/scheduler/schedule_26O1_scheduler.gif)
 
 linux进程的优先级有140种，其中优先级(0-99)对应实时进程，优先级(100-139)对应普通进程，nice(0)对应优先级120，nice(-10)对应优先级100，nice(19)对应优先级139。
 
@@ -1017,7 +1017,7 @@ unsigned int normalized_sysctl_sched_latency = 6000000ULL;
 
 ### 2.2.3、红黑树(Red Black Tree)
 
-![schedule_rbtree](../image/scheduler/schedule_rbtree.png)
+![schedule_rbtree](../images/scheduler/schedule_rbtree.png)
 
 红黑树又称为平衡二叉树，它的特点：
 
@@ -1074,7 +1074,7 @@ static void __enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
 
 ### 2.2.4、sched_entity和task_group
 
-![schedule_cfs_frame](../image/scheduler/schedule_cfs_frame.png)
+![schedule_cfs_frame](../images/scheduler/schedule_cfs_frame.png)
 
 因为新的内核加入了task_group的概念，所以现在不是使用task_struct结构直接参与到schedule计算当中，而是使用sched_entity结构。一个sched_entity结构可能是一个task也可能是一个task_group->se[cpu]。上图非常好的描述了这些结构之间的关系。
 
@@ -1497,7 +1497,7 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
 
 ### 2.2.7、cfs bandwidth
 
-![schedule_cfs_bandwidth](../image/scheduler/schedule_cfs_bandwidth.png)
+![schedule_cfs_bandwidth](../images/scheduler/schedule_cfs_bandwidth.png)
 
 - 1、cfs bandwidth是针对task_group的配置，一个task_group的bandwidth使用一个struct cfs_bandwidth *cfs_b数据结构来控制。
 
@@ -3514,7 +3514,7 @@ static void sched_rt_update_capacity_req(struct rq *rq)
 
 上面这个实例的意思就是rt-throttle的周期是1s，1s周期内可以运行的时间为950ms。rt进程在1s以内如果运行时间达到950ms则会被强行停止，1s时间到了以后才会被恢复，这样进程就被强行停止了50ms。
 
-![schedule_rt-throttle](../image/scheduler/schedule_rt-throttle.png)
+![schedule_rt-throttle](../images/scheduler/schedule_rt-throttle.png)
 
 下面我们来具体分析一下具体代码：
 
@@ -3945,20 +3945,20 @@ __update_load_avg()函数是计算负载的核心，他的核心思想还是求�
 
 每个等分的衰减比例都是不一样的，所以最后的负载计算变成了一个等比队列(geometric series)的求和。等比队列的特性和求和公式如下(y即是公式中的等比比例q)：
 
-![schedule_geometric_series](../image/scheduler/schedule_geometric_series.png)
+![schedule_geometric_series](../images/scheduler/schedule_geometric_series.png)
 
 
 - ***2、时间分段；***
 
 在计算一段超过1024us(1ms)的时间负载时，__update_load_avg()会把需要计算的时间分成3份：时间段A和之前计算的负载补齐1024us，时间段B是多个1024us的取整，时间段C是最后不能取整1024us的余数；
 
-![schedule_update_load_avg_3time](../image/scheduler/schedule_update_load_avg_3time.png)
+![schedule_update_load_avg_3time](../images/scheduler/schedule_update_load_avg_3time.png)
 
 - ***3、scale_freq、scale_cpu的含义；***
 
 ***scale_freq***表示 当前freq 相对 本cpu最大freq 的比值：scale_freq = (cpu_curr_freq / cpu_max_freq) * 1024：
 
-![schedule_update_load_avg_scale_freq](../image/scheduler/schedule_update_load_avg_scale_freq.png)
+![schedule_update_load_avg_scale_freq](../images/scheduler/schedule_update_load_avg_scale_freq.png)
 
 ```
 static __always_inline int
@@ -4001,7 +4001,7 @@ void arch_scale_set_curr_freq(int cpu, unsigned long freq)
 
 ***scale_cpu***表示 (当前cpu最大运算能力 相对 所有cpu中最大的运算能力 的比值) * (cpufreq_policy的最大频率 相对 本cpu最大频率 的比值)，：scale_cpu = cpu_scale * max_freq_scale / 1024。后续的rebalance计算中经常使用capacity的叫法，和scale_cpu是同一含义。因为max_freq_scale基本=1024，所以scale_cpu基本就是cpu_scale的值：
 
-![schedule_update_load_avg_scale_cpu](../image/scheduler/schedule_update_load_avg_scale_cpu.png)
+![schedule_update_load_avg_scale_cpu](../images/scheduler/schedule_update_load_avg_scale_cpu.png)
 
 ```
 unsigned long arch_scale_cpu_capacity(struct sched_domain *sd, int cpu)
@@ -4394,7 +4394,7 @@ static inline int update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
 
 我们从上面等比队列的求和公式:Sn = a1(1-q^n)/(1-q) = 1024(1 - 0.978520621^n)/(1-0.978520621)。我们来看这个求和函数的曲线。
 
-![schedule_geometric_series_sum](../image/scheduler/schedule_geometric_series_sum.png)
+![schedule_geometric_series_sum](../images/scheduler/schedule_geometric_series_sum.png)
 
 从曲线上分析，当x到达一定值后y趋于稳定，不再增长。
 
@@ -4475,25 +4475,25 @@ struct sched_avg {
 
 - 8.1、loadwop_avg：
 
-![schedule_update_load_avg_loadwop_avg](../image/scheduler/schedule_update_load_avg_loadwop_avg.png)
+![schedule_update_load_avg_loadwop_avg](../images/scheduler/schedule_update_load_avg_loadwop_avg.png)
 
 - 8.2、load_avg：
 
-![schedule_update_load_avg_load_avg](../image/scheduler/schedule_update_load_avg_load_avg.png)
+![schedule_update_load_avg_load_avg](../images/scheduler/schedule_update_load_avg_load_avg.png)
 
 - 8.3、util_avg：
 
-![schedule_update_load_avg_util_avg](../image/scheduler/schedule_update_load_avg_util_avg.png)
+![schedule_update_load_avg_util_avg](../images/scheduler/schedule_update_load_avg_util_avg.png)
 
 - 8.4、scale_freq：
 
 需要特别强调的是loadwop_avg、load_avg、util_avg在他们的时间分量中都乘以了scale_freq，所以上面几图都是他们在max_freq下的表现，实际的负载还受当前freq的影响：
 
-![schedule_update_load_avg_scale_freq](../image/scheduler/schedule_update_load_avg_scale_freq.png)
+![schedule_update_load_avg_scale_freq](../images/scheduler/schedule_update_load_avg_scale_freq.png)
 
 - 8.5、capacity/scale_cpu
 
-![schedule_update_load_avg_scale_cpu](../image/scheduler/schedule_update_load_avg_scale_cpu.png)
+![schedule_update_load_avg_scale_cpu](../images/scheduler/schedule_update_load_avg_scale_cpu.png)
 
 capacity是在smp负载均衡时更新：
 
@@ -4897,7 +4897,7 @@ decay_load_missed(unsigned long load, unsigned long missed_updates, int idx)
 }
 ```
 
-![schedule_cpu_load](../image/scheduler/schedule_cpu_load.png)
+![schedule_cpu_load](../images/scheduler/schedule_cpu_load.png)
 
 - 1、cpu_load[]含5条均线，反应不同时间窗口长度下的负载情况；主要供load_balance()在不
 同场景判断是否负载平衡的比较基准，常用为cpu_load[0]和cpu_load[1];
@@ -4926,7 +4926,7 @@ $ cat /proc/loadavg
 - If the 1 minute average is lower than the 5 or 15 minute averages, then load is decreasing.
 - If they are higher than your CPU count, then you might have a performance problem (it depends).
 
-![schedule_sys_load_avg](../image/scheduler/schedule_sys_load_avg.png)
+![schedule_sys_load_avg](../images/scheduler/schedule_sys_load_avg.png)
 
 > 最早的系统级平均负载(load average)只会统计runnable状态。但是linux后面觉得这种统计方式代表不了系统的真实负载；举一个例子：系统换一个低速硬盘后，他的runnable负载还会小于高速硬盘时的值；linux认为睡眠状态(TASK_INTERRUPTIBLE/TASK_UNINTERRUPTIBLE)也是系统的一种负载，系统得不到服务是因为io/外设的负载过重；系统级负载统计函数calc_global_load_tick()中会把(this_rq->nr_running+this_rq->nr_uninterruptible)都计入负载；
 
@@ -6458,7 +6458,7 @@ kernel_init() -> kernel_init_freeable() -> sched_init_smp() -> init_sched_domain
 
 用图形表达的关系如下：
 
-![schedule_sched_domain_mt6799_8cpus](../image/scheduler/schedule_sched_domain_mt6799_8cpus.png)
+![schedule_sched_domain_mt6799_8cpus](../images/scheduler/schedule_sched_domain_mt6799_8cpus.png)
 
 
 每个sched_domain中的参数也非常重要，在函数sd_init()中初始化，在smp负载均衡时会频繁的使用这些参数和标志：
@@ -7141,7 +7141,7 @@ DIE层级 | busy | 8 | 32 | 256ms
 
 - 3、继续find_busiest_group()，在sg链表中找出负载最重的sg。核心计算在update_sd_lb_stats()、update_sg_lb_stats()中。如果dst_cpu所在的local_group负载大于busiest sg，或者大于sds平均负载，中断操作；如果成功计算需要迁移的负载env->imbalance，为min((sds->avg - local), (busiest - sds->avg))；
 
-![schedule_rebalance_domains_find_busiest_group](../image/scheduler/schedule_rebalance_domains_find_busiest_group.png)
+![schedule_rebalance_domains_find_busiest_group](../images/scheduler/schedule_rebalance_domains_find_busiest_group.png)
 
 - 3.1、根据当前cpu的idle状态计算cpu load(rq->cpu_load[])时选用的index值：
 
@@ -7186,7 +7186,7 @@ env->imbalance|min((busiest->avg_load - sds->avg_load)*busiest->group_capacity, 
 
 - 4、继续find_busiest_queue()，查找busiest sg中负载最重的cpu。
 
-![schedule_rebalance_domains_find_busiest_queue](../image/scheduler/schedule_rebalance_domains_find_busiest_queue.png)
+![schedule_rebalance_domains_find_busiest_queue](../images/scheduler/schedule_rebalance_domains_find_busiest_queue.png)
 
 - 4.1、找出sg中weighted_cpuload*capacity_of值最大的cpu：
 
@@ -8526,7 +8526,7 @@ static void update_cfs_rq_h_load(struct cfs_rq *cfs_rq)
 
 - 1、cpu在进入nohz idle状态时，设置标志：
 
-![schedule_nohz_balance_step1](../image/scheduler/schedule_nohz_balance_step1.png)
+![schedule_nohz_balance_step1](../images/scheduler/schedule_nohz_balance_step1.png)
 
 ```
 tick_nohz_idle_enter() -> set_cpu_sd_state_idle():
@@ -8589,7 +8589,7 @@ void nohz_balance_enter_idle(int cpu)
 
 - 2、在trigger_load_balance()中判断，当前是否需要触发idle load balance：
 
-![schedule_nohz_balance_step2](../image/scheduler/schedule_nohz_balance_step2.png)
+![schedule_nohz_balance_step2](../images/scheduler/schedule_nohz_balance_step2.png)
 
 ```
 void trigger_load_balance(struct rq *rq)
@@ -8778,7 +8778,7 @@ void scheduler_ipi(void)
 
 - 3、被选中的ilb_cpu被唤醒后，需要帮其他所有idle cpu完成rebalance_domains()工作：
 
-![schedule_nohz_balance_step3](../image/scheduler/schedule_nohz_balance_step3.png)
+![schedule_nohz_balance_step3](../images/scheduler/schedule_nohz_balance_step3.png)
 
 ```
 static void nohz_idle_balance(struct rq *this_rq, enum cpu_idle_type idle)
@@ -8868,22 +8868,22 @@ end:
 
 首先找到能容纳进程p的util且capacity最小的cluster：
 
-![schedule_select_task_energy_aware_wake_find_cluaster](../image/scheduler/schedule_select_task_energy_aware_wake_find_cluaster.png)
+![schedule_select_task_energy_aware_wake_find_cluaster](../images/scheduler/schedule_select_task_energy_aware_wake_find_cluaster.png)
 
 然后在目标cluster中找到加上进程p以后，剩余capacity最大的cpu：
 
-![schedule_select_task_energy_aware_find_cpu](../image/scheduler/schedule_select_task_energy_aware_find_cpu.png)
+![schedule_select_task_energy_aware_find_cpu](../images/scheduler/schedule_select_task_energy_aware_find_cpu.png)
 
 pre_cpu是进程p上一次运行的cpu作为src_cpu，上面选择的target_cpu作为dst_cpu，就是尝试计算进程p从pre_cpu迁移到target_cpu系统的功耗差异：
 
-![schedule_select_task_energy_aware_migration_direct](../image/scheduler/schedule_select_task_energy_aware_migration_direct.png)
+![schedule_select_task_energy_aware_migration_direct](../images/scheduler/schedule_select_task_energy_aware_migration_direct.png)
 
 
 - 1.2、计算负载变化前后，target_cpu和prev_cpu带来的power变化。如果没有power增加则返回target_cpu，如果有power增加则返回prev_cpu；
 
 计算负载变化的函数energy_diff()循环很多比较复杂，仔细分析下来就是计算target_cpu/prev_cpu在“MC层次cpu所在sg链表”+“DIE层级cpu所在sg”，这两种范围在负载变化中的功耗差异：
 
-![schedule_select_task_energy_aware_energy_diff](../image/scheduler/schedule_select_task_energy_aware_energy_diff.png)
+![schedule_select_task_energy_aware_energy_diff](../images/scheduler/schedule_select_task_energy_aware_energy_diff.png)
 
 energy_diff()的计算方法如下：
 
@@ -9972,7 +9972,7 @@ HMP负载均衡的操作分两种：
 
 ### 4.2.1、hmp domain初始化
 
-![schedule_hmp_domains_init](../image/scheduler/schedule_hmp_domains_init.png)
+![schedule_hmp_domains_init](../images/scheduler/schedule_hmp_domains_init.png)
 
 hmp在初始化的时候会每个cluster分配一个hmp_domain，把所有hmp_domain加入到全局链表hmp_domains中。hmp_domains链表构建完成以后，离链表头hmp_domains最近的hmp_domain是速度最快的cluster，离hmp_domains越远hmp_domain对应的速度越慢。因为在构造链表时是按照cluster id来加入的，速度最快cluster的hmp_domain最后加入，所以离表头最近。
 
@@ -10049,13 +10049,13 @@ hmp_force_up_migration()的操作主要有以下几个步骤：
 
 hmp_force_up_migration尝试把slow cpu上的heavy进程迁移到fast cpu上，关于slow、fast的选择有以下几种场景：
 
-![schedule_hmp_up_migration](../image/scheduler/schedule_hmp_up_migration.png)
+![schedule_hmp_up_migration](../images/scheduler/schedule_hmp_up_migration.png)
 
 - 2、选择当前cpu的heaviest进程作为迁移进程p；并不会遍历cpu上所有进程去选出heaviest进程，只会查询curr进程和cfs_rq中5个进程中的heaviest；
 
 - 3、根据fast_cpu_mask，选择一个负载最少的target cpu；
 
-![schedule_hmp_force_up_migration_hmp_select_cpu](../image/scheduler/schedule_hmp_force_up_migration_hmp_select_cpu.png)
+![schedule_hmp_force_up_migration_hmp_select_cpu](../images/scheduler/schedule_hmp_force_up_migration_hmp_select_cpu.png)
 
 - 4、根据源cpu(curr_cpu)、目的cpu(target_cpu)，计算负载；
 
@@ -10887,12 +10887,12 @@ hmp_force_down_migration()的操作主要有以下几个步骤：
 
 hmp_force_down_migration尝试把fast cpu上的light进程迁移到slow cpu上，关于fast、slow的选择有以下几种场景：
 
-![schedule_hmp_down_migration](../image/scheduler/schedule_hmp_down_migration.png)
+![schedule_hmp_down_migration](../images/scheduler/schedule_hmp_down_migration.png)
 - 2、选择当前cpu的lightest进程作为迁移进程p；并不会遍历cpu上所有进程去选出lightest进程，只会查询curr进程和cfs_rq中5个进程中的lightest；
 
 - 3、根据slow_cpu_mask，选择一个负载最少的target cpu；
 
-![schedule_hmp_force_down_migration_hmp_select_cpu](../image/scheduler/schedule_hmp_force_down_migration_hmp_select_cpu.png)
+![schedule_hmp_force_down_migration_hmp_select_cpu](../images/scheduler/schedule_hmp_force_down_migration_hmp_select_cpu.png)
 
 - 4、根据源cpu(curr_cpu)、目的cpu(target_cpu)，计算负载；
 
@@ -11291,18 +11291,18 @@ cpu的频率调整是基于3个层次的：cpufreq governor、cpufreq core、cpu
 - 2、cpufreq core对通用层进行了一些封装，比如cpufreq_policy的封装；
 - 3、cpufreq driver是底层操作的实现，比如freq_table的初始化、cpu target频率的配置；
 
-![schedule_cpufreq_frame](../image/scheduler/schedule_cpufreq_frame.png)
+![schedule_cpufreq_frame](../images/scheduler/schedule_cpufreq_frame.png)
 
 如果是MTK平台，cpufreq driver除了接受governor的频率调整还需要接受ppm的频率调整，它的框图大概如下：
 
-![schedule_cpufreq_mtk_frame](../image/scheduler/schedule_cpufreq_mtk_frame.png)
+![schedule_cpufreq_mtk_frame](../images/scheduler/schedule_cpufreq_mtk_frame.png)
 
 
 ### 4.3.1、cpufreq core & cpufreq driver
 
 cpufreq core层次最核心的就是每个cpu有一个自己的cpufreq_policy policy，放在per_cpu(cpufreq_cpu_data, cpu)变量中。实际上cpufreq_policy是一个cluster对应一个的，因为在现有的架构中，同一个cluster cpu都是同一个频率，所以同cluster中所有cpu的per_cpu(cpufreq_cpu_data, cpu)都指向同一个cpufreq_policy。
 
-![schedule_cpufreq_core](../image/scheduler/schedule_cpufreq_core.png)
+![schedule_cpufreq_core](../images/scheduler/schedule_cpufreq_core.png)
 
 #### 4.3.1.1、cpufreq_policy policy初始化
 
@@ -12209,7 +12209,7 @@ static int _mt_cpufreq_target(struct cpufreq_policy *policy, unsigned int target
 
 interactive的思想就是使用cpu的负载来调整cpu频率，核心就是：使用一个20ms的定时器来计算cpu占用率，根据cpu占用率的不同threshold来调整不同档位的频率。
 
-![schedule_cpufreq_interactive](../image/scheduler/schedule_cpufreq_interactive.png)
+![schedule_cpufreq_interactive](../images/scheduler/schedule_cpufreq_interactive.png)
 
 interactive的负载计算方法如上图所示。interactive的整个计算方法大概如下：
 
@@ -12702,7 +12702,7 @@ static unsigned int choose_freq(struct cpufreq_interactive_cpuinfo *pcpu,
 
 kernel对hotplug的支持是很完善的，标准接口cpu_up()/cpu_down()可以进行hotplug。
 
-![schedule_hotplug_cpu_up](../image/scheduler/schedule_hotplug_cpu_up.png)
+![schedule_hotplug_cpu_up](../images/scheduler/schedule_hotplug_cpu_up.png)
 
 #### 4.4.1.2、hotplug 进程迁移
 
@@ -12878,7 +12878,7 @@ out:
 
 在有了hotplug的底层cpu_cup()、cpu_down()的实现以后，在此之上还需要有一套算法根据cpu的负载来动态hotplug。MTK这套算法比较齐全，主要分为HICA、hps_algo_main两部分。
 
-![schedule_hotplug_mtk](../image/scheduler/schedule_hotplug_mtk.png)
+![schedule_hotplug_mtk](../images/scheduler/schedule_hotplug_mtk.png)
 
 #### 4.4.2.1、HICA/PPM
 
@@ -13931,7 +13931,7 @@ sched governor比较传统interactive governor有以下优点：
 
 interactive governor的主要思想就是综合rt、cfs的负载，判断当前freq的capacity是否满足需求，是否需要调频。
 
-![schedule_sched_governor](../image/scheduler/schedule_sched_governor.png)
+![schedule_sched_governor](../images/scheduler/schedule_sched_governor.png)
 
 ### 5.2.1、rt request
 
@@ -14740,11 +14740,11 @@ static int account_busy_for_task_demand(struct task_struct *p, int event)
 
 - 3、在统计时间时，可能碰到的3种组合情况：
 
-![schedule_walt_update_task_demand](../image/scheduler/schedule_walt_update_task_demand.png)
+![schedule_walt_update_task_demand](../images/scheduler/schedule_walt_update_task_demand.png)
 
 - 4、如果一个window还没有完成，会逐步累加时间到p->ravg.sum；如果一个window完成，存储最新window负载到p->ravg.sum_history[RAVG_HIST_SIZE_MAX]中，sum_history[]一共有5个槽位；系统根据sched_window_stats_policy选择策略(RECENT、MAX、AVG、MAX_RECENT_AVG)，根据sum_history[]计算选择一个合适的值作为进程负载p->ravg.demand；同时根据sum_history[]的计算进程的负载预测p->ravg.pred_demand；
 
-![schedule_walt_update_history](../image/scheduler/schedule_walt_update_history.png)
+![schedule_walt_update_history](../images/scheduler/schedule_walt_update_history.png)
 
 - 5、walt的task级别的负载是p->ravg.demand，cpu级别负载是rq->hmp_stats.cumulative_runnable_avg；
 
@@ -15768,7 +15768,7 @@ out:
 
 qualcom对interactive governor进行了改造，打造成了可以使用sched_load的interactive governor。
 
-![schedule_walt_qualcom_interactive](../image/scheduler/schedule_walt_qualcom_interactive.png)
+![schedule_walt_qualcom_interactive](../images/scheduler/schedule_walt_qualcom_interactive.png)
 
 
 - 1、interactive governor注册回调函数，接收sched_load变化事件；
@@ -16357,7 +16357,7 @@ mount -t cgroup -o cpu,cpuset cpu&cpuset /dev/cpu_cpuset_test
 
 一个简单明了的例子如下图所示：
 
-![schedule_cgroup_frame](../image/scheduler/schedule_cgroup_frame.png)
+![schedule_cgroup_frame](../images/scheduler/schedule_cgroup_frame.png)
 
 
 关于cgroup的结构有以下规则和规律：
@@ -16370,7 +16370,7 @@ mount -t cgroup -o cpu,cpuset cpu&cpuset /dev/cpu_cpuset_test
 - 6、一个任务对系统中不同的subsys一定会有引用，但是会引用到不同的hierarchy不同的cgroup即不同css当中；所以系统使用css_set结构来管理任务对css的引。如果任务引用的css组合相同，那他们开源使用相同的css_set；
 - 7、还有cgroup到task的反向引用，系统引入了cg_group_link结构。这部分可以参考[Docker背后的内核知识——cgroups资源限制](http://www.infoq.com/cn/articles/docker-kernel-knowledge-cgroups-resource-isolation)一文的描述，如下图的结构关系：
 
-![schedule_cgroup_frame_detail](../image/scheduler/schedule_cgroup_frame_detail.png)
+![schedule_cgroup_frame_detail](../images/scheduler/schedule_cgroup_frame_detail.png)
 
 
 

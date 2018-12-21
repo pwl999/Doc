@@ -418,7 +418,7 @@ static int task_clock_event_init(struct perf_event *event)
 
 ## 3.1、"software"
 
-![perf_k_pmu_sw_provide_data](../image/perf_k/perf_k_pmu_sw_provide_data.png)
+![perf_k_pmu_sw_provide_data](../images/perf_k/perf_k_pmu_sw_provide_data.png)
 
 这种模式下，控制"software"event的启动和停止，实际上就是把event加入/移除到hash链表上。
 

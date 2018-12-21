@@ -19,7 +19,7 @@ workqueue是内核里面很重要的一个机制，特别是内核驱动，一�
 - pwq(pool_workqueue)：中间人/中介，负责建立起workqueue和worker_pool之间的关系。workqueue和pwq是一对多的关系，pwq和worker_pool是一对一的关系。
 
 
-![wq_topology](../image/workqueue/wq_topology.png)
+![wq_topology](../images/workqueue/wq_topology.png)
 
 最终的目的还是把work(工作)传递给worker(工人)去执行，中间的数据结构和各种关系目的是把这件事组织的更加清晰高效。
 
@@ -60,11 +60,11 @@ root      23699 2     0      0     worker_thr 0000000000 S kworker/0:1		// cpu0 
 ```
 
 
-![wq_worker_pool](../image/workqueue/wq_worker_pool.png) 
+![wq_worker_pool](../images/workqueue/wq_worker_pool.png) 
 
 对应的拓扑图如下：
 
-![wq_normal_wq_topology](../image/workqueue/wq_normal_wq_topology.png)
+![wq_normal_wq_topology](../images/workqueue/wq_normal_wq_topology.png)
 
 以下是normal worker_pool详细的创建过程代码分析：
 
@@ -271,19 +271,19 @@ unbound worker_pool也分成两类：
 
 - unbound_std_wq。每个node对应一个worker_pool，多个node就对应多个worker_pool;
 
-![wq_unbound_std_wq](../image/workqueue/wq_unbound_std_wq.png)  
+![wq_unbound_std_wq](../images/workqueue/wq_unbound_std_wq.png)  
 
 对应的拓扑图如下：
 
-![wq_unboundstd_wq_topology](../image/workqueue/wq_unboundstd_wq_topology.png)
+![wq_unboundstd_wq_topology](../images/workqueue/wq_unboundstd_wq_topology.png)
 
 - ordered_wq。所有node对应一个default worker_pool；
 
-![wq_ordered_wq](../image/workqueue/wq_ordered_wq.png)  
+![wq_ordered_wq](../images/workqueue/wq_ordered_wq.png)  
 
 对应的拓扑图如下：
 
-![wq_ordered_wq_topology](../image/workqueue/wq_ordered_wq_topology.png)
+![wq_ordered_wq_topology](../images/workqueue/wq_ordered_wq_topology.png)
 
 
 以下是unbound worker_pool详细的创建过程代码分析：
@@ -812,7 +812,7 @@ ing worker来处理；
 - 如果没有work需要执行，会让所有worker进入idle状态；
 - 如果创建的worker过多，destroy_worker在300s(IDLE_WORKER_TIMEOUT)时间内没有再次运行的idle worker。
 
-![wq_worker_statusmachine](../image/workqueue/wq_worker_statusmachine.png)
+![wq_worker_statusmachine](../images/workqueue/wq_worker_statusmachine.png)
 
 详细代码可以参考上节worker_thread() -> process_one_work()的分析。
 

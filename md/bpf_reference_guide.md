@@ -1735,7 +1735,7 @@ $ dot -Tpng output.dot -o output.png
 
 另一个选项是将dot文件传递给查看器dotty，即"dotty output.dot"，其中是bpf_host.o程序的结果如下(小摘录):
 
-![bpf_dot](../image/bpf/bpf_dot.png)
+![bpf_dot](../images/bpf/bpf_dot.png)
 
 注意，xlated指令转储提供了后验证器BPF指令映像，这意味着它转储指令，就好像它们要通过BPF解释器运行一样。在内核中，验证程序对BPF加载程序提供的原始指令执行各种重写。
 

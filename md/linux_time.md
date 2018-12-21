@@ -1,7 +1,7 @@
 
 # 1、Linux时钟框架
 
-![linux_time_profile](../image/time/linux_time_profile.png)[^DroidPhoneo]
+![linux_time_profile](../images/time/linux_time_profile.png)[^DroidPhoneo]
 
 上图是linux时钟框架一个经典的描述。本质上linux各种时钟架构和服务是基于硬件提供的两种timer而构建的。
 
@@ -24,11 +24,11 @@
 ## 1.1、Exynos MCT(Multi-Core Timer)
 
 我们以samsung exynos架构为例来说明linux对timer的使用。
-![exynos_timer](../image/time/exynos_timer.png)
+![exynos_timer](../images/time/exynos_timer.png)
 
 从上图可以看到，exynos有1个64bit global timer用来做时间戳timer，有8个31bit localtimer用来做定时timer，每个cpu拥有一个localtimer。
 
-![exynos_mct_initflow](../image/time/exynos_mct_initflow.png)
+![exynos_mct_initflow](../images/time/exynos_mct_initflow.png)
 
 上图是exynos driver的初始化流程，mct_init_dt()中包含了主要的初始化流程：
 
@@ -45,7 +45,7 @@ static void __init mct_init_dt(struct device_node *np, unsigned int int_type)
 后面结合clocksource和clockevent的子系统的解析，再来详细描述exynos系统的具体实现。
 
 # 2、clocksource & timekeeper
-![clocksource_timekeeper](../image/time/clocksource_timekeeper.png)
+![clocksource_timekeeper](../images/time/clocksource_timekeeper.png)
 
 上图描述的是clocksource和timekeeper的关系：
 
@@ -1342,7 +1342,7 @@ static void __timekeeping_inject_sleeptime(struct timekeeper *tk,
 
 # 3、clock_event
 
-![clockevent](../image/time/clockevent.png)
+![clockevent](../images/time/clockevent.png)
 
 clock_event其实就是对local timer的使用，每个cpu对应一个本地local timer。global timer启动后不需要主动做任何事情，只需要等待timekepper的读取就可以了。而local timer需要触发中断，它的主要价值就体现在定时中断处理了，中断的时间可以是固定的(period mode)也或者是不固定的(oneshot mode)。
 
@@ -1896,7 +1896,7 @@ static void tick_periodic(int cpu)
 
 NOHZ_MODE_INACTIVE就是系统初始化时的状态：“td=period模式, dev=period/oneshot模式, hrtimer=low res, noHz=dis”。
 
-![clockevent_NOHZ_MODE_INACTIVE](../image/time/clockevent_NOHZ_MODE_INACTIVE.png)
+![clockevent_NOHZ_MODE_INACTIVE](../images/time/clockevent_NOHZ_MODE_INACTIVE.png)
 
 NOHZ_MODE_INACTIVE模式：
 
@@ -1908,7 +1908,7 @@ NOHZ_MODE_INACTIVE模式：
 
 在系统的运行过程中系统尝试进入精度更高的模式，如果noHZ可以使能，但是hrtimer高精度不能使能，即进入NOHZ_MODE_LOWRES模式：“td=period模式, dev=oneshot模式, hrtimer=low res, noHz=en”。
 
-![clockevent_NOHZ_MODE_LOWRES](../image/time/clockevent_NOHZ_MODE_LOWRES.png)
+![clockevent_NOHZ_MODE_LOWRES](../images/time/clockevent_NOHZ_MODE_LOWRES.png)
 
 NOHZ_MODE_LOWRES模式：
 
@@ -1947,7 +1947,7 @@ static void tick_nohz_handler(struct clock_event_device *dev)
 
 在系统的运行过程中系统尝试进入精度更高的模式，如果noHZ可以使能，hrtimer高精度可以使能，即进入NOHZ_MODE_HIGHRES模式：“td=period模式, dev=oneshot模式, hrtimer=high res, noHz=en”。
 
-![clockevent_NOHZ_MODE_HIGHRES](../image/time/clockevent_NOHZ_MODE_HIGHRES.png)
+![clockevent_NOHZ_MODE_HIGHRES](../images/time/clockevent_NOHZ_MODE_HIGHRES.png)
 
 NOHZ_MODE_HIGHRES：
 
@@ -1957,7 +1957,7 @@ NOHZ_MODE_HIGHRES：
 
 为了支持hrtimer的高精度模式，hrtimer必须直接使用tick_device的oneshot模式，而常规的tick timer转换成hrtimer的一个子timer。
 
-![ftrace_NOHZ_MODE_HIGHRES](../image/time/ftrace_NOHZ_MODE_HIGHRES.png)
+![ftrace_NOHZ_MODE_HIGHRES](../images/time/ftrace_NOHZ_MODE_HIGHRES.png)
 
 上图是NOHZ_MODE_HIGHRES模式下，用ftrace抓取HW timer硬件中断和tick任务的执行情况：
 
@@ -2464,7 +2464,7 @@ static void timer_setting_after_wfi(bool f26m_off)
 
 hrtimer的组织相对来说还是比较简单的，每个cpu对应一个hrtimer_cpu_base，每个hrtimer_cpu_base中有4类clock_base代表4种时间类型(HRTIMER_BASE_REALTIME、HRTIMER_BASE_MONOTONIC、HRTIMER_BASE_BOOTTIME、HRTIMER_BASE_TAI)的hrtimer，每个clock_base是以红黑树来组织同一类型的hrtimer的：
 
-![hrtimer](../image/time/hrtimer.png)
+![hrtimer](../images/time/hrtimer.png)
 
 ```
 DEFINE_PER_CPU(struct hrtimer_cpu_base, hrtimer_bases) =
@@ -2557,7 +2557,7 @@ __hrtimer_run_queues()
 
 低精度timer的组织形式和hrtimer类似，只是timer的链接不是采用红黑树，而是采用tv1 - tv5等一系列的链表。
 
-![lowres_timer](../image/time/lowres_timer.png)
+![lowres_timer](../images/time/lowres_timer.png)
 
 tv1 - tv5中保留着一系列槽位，每个槽位代表一个超时时间，把相同超时时间的低精度timer链接到同一槽位当中。
 

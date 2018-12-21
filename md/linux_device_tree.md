@@ -5,7 +5,7 @@
 
 DeviceTree的结构非常简单，由两种元素组成：Node(节点)、Property(属性)。下图是一个真实的简单的DeviceTree树形结构图。
 
-![image](../image/dts/DeviceTree.png)
+![image](../images/dts/DeviceTree.png)
 
 - Node节点。在DTS中使用一对花括号"node-name{}"来定义;
 - Property属性。在Node中使用"property-name=value"字符串来定义；
@@ -474,7 +474,7 @@ mapping specified in ranges.
 - "Interrupt Controllers"，中断控制器，处理中断。
 - "Interrupt Nexus"，中断联结，路由中断给中断控制器。
 
-![image](../image/dts/interrupt_tree.png)
+![image](../images/dts/interrupt_tree.png)
 
 #### 1.1.7.1、Interrupt Generating Devices Property
 
@@ -1178,7 +1178,7 @@ DTB(Devicetree Blob)是DTS的二进制文件格式，Kernel使用DTC工具将DTS
 
 ## 2.2、DTB的文件结构
 
-![image](../image/dts/dtb_struct.png)
+![image](../images/dts/dtb_struct.png)
 
 DTB文件的结构如上图所示，主要在3部分：
 
@@ -1233,7 +1233,7 @@ struct fdt_property {
 
 可以使用hex编辑器来查看DTB文件的结构：
 
-![image](../image/dts/dtb_hex_example.png)
+![image](../images/dts/dtb_hex_example.png)
 
 ## 2.3、Bootloader对DTB的传递
 

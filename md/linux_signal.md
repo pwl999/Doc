@@ -12,7 +12,7 @@ Linux信号机制基本上每个同学都用过，但是信号的具体实现机
 让信号看起来是一个异步中断的关键就是，正常的用户进程是会频繁的在用户态和内核态之间切换的(这种切换包括：系统调用、缺页异常、系统中断...)，所以信号能很快的能得到执行。  
 这也带来了一点问题，内核进程是不响应信号的，除非它刻意的去查询。所以通常情况下我们无法通过kill命令去杀死一个内核进程。
 
-![signal_ret_to_user](../image/signal/signal_ret_to_user.png)  
+![signal_ret_to_user](../images/signal/signal_ret_to_user.png)  
 
 - arch/arm64/kernel/entry.s:  
 - el0_sync()/el0_irq() -> ret_to_user() -> work_pending() -> do_notify_resume()
@@ -264,7 +264,7 @@ linux常用的是常规信号，以下是具体的定义[^ULK]：
 
 kill()系统调用的功能是发送一个信号给线程组，只需要线程组挑出一个线程来响应处理信号。但是对于致命信号，线程组内所有进程都会被杀死，而不仅仅是处理信号的线程。  
 
-![signal_kill](../image/signal/signal_kill.png)  
+![signal_kill](../images/signal/signal_kill.png)  
 
 - kernel/signal.c:  
 - kill() -> kill_something_info() -> kill_pid_info() -> group_send_sig_info() -> do_send_sig_info() -> send_signal() -> __send_signal()  
@@ -337,7 +337,7 @@ int group_send_sig_info(int sig, struct siginfo *info, struct task_struct *p)
 }
 ```
 
-![signal_pending_queue](../image/signal/signal_pending_queue.png)[^ULK]  
+![signal_pending_queue](../images/signal/signal_pending_queue.png)[^ULK]  
 
 接下来来到了发送信号的核心函数__send_signal()，函数的主要目的是把信号挂到信号的pending队列中去。  
 pending队列有两种：一种是进程组共享的task_struct->signal->>shared_pending，发送给线程组的信号会挂载到该队列；另一种是进程私有队列task_struct-->pending，发送给进程的信号会挂载到该队列。  
@@ -762,7 +762,7 @@ void signal_wake_up_state(struct task_struct *t, unsigned int state)
 
 kill()是向进程组发一个信号，而tkill()是向某一个进程发送信号。
 
-![signal_tkill](../image/signal/signal_tkill.png)  
+![signal_tkill](../images/signal/signal_tkill.png)  
 
 
 - kernel/signal.c:  
@@ -831,7 +831,7 @@ do_send_specific(pid_t tgid, pid_t pid, int sig, struct siginfo *info)
 
 tgkill()是向特定线程组中的进程发送信号。
 
-![signal_tgkill](../image/signal/signal_tgkill.png)  
+![signal_tgkill](../images/signal/signal_tgkill.png)  
 
 
 - kernel/signal.c:  
@@ -1353,7 +1353,7 @@ relock:
 如果用户没有注册信号处理函数，默认的内核处理函数在get_signal()函数中执行完了。对于用户有注册处理函数的信号，但是因为这些处理函数都是用户态的，所以内核使用了一个技巧：先构造堆栈，返回用户态去执行自定义信号处理函数，再返回内核态继续被信号打断的返回用户态的动作。  
 
 
-![signal_handle_signal](../image/signal/signal_handle_signal.png)[^ULK]  
+![signal_handle_signal](../images/signal/signal_handle_signal.png)[^ULK]  
 
 我们来看handle_signal()函数中的具体实现。
 

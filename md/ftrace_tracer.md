@@ -51,7 +51,7 @@ ENDPROC(_mcount)
 
 static ftrace就是使用重定义_mcount()函数的方法来实现插桩的:
 
-![image](../image/ftrace_tracer/static_ftrace_probe.png)
+![image](../images/ftrace_tracer/static_ftrace_probe.png)
 
 arch/arm64/kernel/entry-ftrace.S：
 
@@ -159,13 +159,13 @@ static ftrace一旦使能，对kernel中所有的函数(除开notrace、online�
 
 1、ftrace在初始化时，根据编译时“scripts/recordmcount.pl”脚本记录的所有函数入口处插桩位置的“bl _mcount”，将其替换成“nop”指令：
 
-![image](../image/ftrace_tracer/dynamic_ftrace_nop.png)
+![image](../images/ftrace_tracer/dynamic_ftrace_nop.png)
 
 2、在tracer enable的时候，把需要跟踪的函数的插桩位置“nop”替换成“bl ftrace_caller”。
 
 为什么不使用“bl _mcount”？主要原因是开发者不喜欢在_mcount()中使用宏来区分两种情况，索性重新创建一个新函数ftrace_caller()。
 
-![image](../image/ftrace_tracer/dynamic_ftrace_probe.png)
+![image](../images/ftrace_tracer/dynamic_ftrace_probe.png)
 
 arch/arm64/kernel/entry-ftrace.S：
 
@@ -518,7 +518,7 @@ static int ftrace_update_code(struct module *mod, struct ftrace_page *new_pgs)
 
 为了应对本文最开始处提出的难题，内核使用了插桩点控制链表+命令hash表的形式。
 
-![image](../image/ftrace_tracer/dynamic_ftrace_stub_manag.png)
+![image](../images/ftrace_tracer/dynamic_ftrace_stub_manag.png)
 
 function tracer插桩点动态管理的原理：
 
@@ -1929,7 +1929,7 @@ trace_function(struct trace_array *tr,
 
 function tracer自定义的trace数据非常简单：ip、parent_ip
 
-![image](../image/ftrace_tracer/entry_function_tracer_format.png)
+![image](../images/ftrace_tracer/entry_function_tracer_format.png)
 
 ### 1.3.2、filter
 
@@ -2079,7 +2079,7 @@ function_graph tracer从function tracer发展而来，function tracer使用“_m
 ## 2.1、插桩原理
 
 
-![image](../image/ftrace_tracer/function_graph_flow.png)
+![image](../images/ftrace_tracer/function_graph_flow.png)
 
 如上图：一切的关键是在入口桩函数被调用时，修改了func()的返回地址，不是返回到func's parent()函数继续去执行，而是返回到reurn桩函数return_to_handler()中。return_to_handler()中执行完自己的return处理函数以后，再把返回地址恢复成func's parent中的地址，返回继续执行原有的路径。
 
@@ -2087,7 +2087,7 @@ function_graph tracer从function tracer发展而来，function tracer使用“_m
 
 ## 2.2、插桩点管理
 
-![image](../image/ftrace_tracer/dynamic_ftrace_stub_manag_graph.png)
+![image](../images/ftrace_tracer/dynamic_ftrace_stub_manag_graph.png)
 
 function_graph tracer插桩点动态管理的原理：
 
@@ -2395,7 +2395,7 @@ static inline int ftrace_graph_addr(unsigned long addr)
 
 ### 2.3.1、trace_graph_entry()
 
-![image](../image/ftrace_tracer/entry_trace_graph_entry.png)
+![image](../images/ftrace_tracer/entry_trace_graph_entry.png)
 
 函数入口的存入：trace_graph_entry() -> __trace_graph_entry()：
 
@@ -2425,7 +2425,7 @@ int __trace_graph_entry(struct trace_array *tr,
 
 ### 2.3.2、trace_graph_return()
 
-![image](../image/ftrace_tracer/entry_trace_graph_return.png)
+![image](../images/ftrace_tracer/entry_trace_graph_return.png)
 
 函数返回的存入：trace_graph_return() -> __trace_graph_return()：
 
@@ -2698,7 +2698,7 @@ irqsoff tracer用来追踪最大关中断时间。它的trace会提供几部分�
 
 ## 3.1、插桩
 
-![image](../image/ftrace_tracer/irqoff_trace_flow.png)
+![image](../images/ftrace_tracer/irqoff_trace_flow.png)
 
 irqsoff tracer的插桩方法，是直接在local_irq_enable()、local_irq_disable()中直接插入钩子函数trace_hardirqs_on()、trace_hardirqs_off()。
 
